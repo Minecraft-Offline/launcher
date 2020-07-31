@@ -42,7 +42,7 @@ launcher.exe --gameDir $PWD\.minecraft --email "Mojang account email" --password
 ```
 
 ## License
-The source code for Minecraft Offline is on a to-be-determined license. Everything in this repository, from the first commit onward, is to be licensed according to the new license once it is decided upon, regardless of cloned copy or fork from this original host. You reserve the right to download, compile, and run this code at your own risk, with no warranty, neither express nor implied. You do not have the right to redistribute compiled code using the source code in this repository without first making your changes public. See LICENSE for a clear copy of this license placeholder.
+The source code for Minecraft Offline is released and licensed under the Mozilla Public License Version 2.0. See [LICENSE](https://github.com/Minecraft-Offline/launcher/blob/master/LICENSE-MPL-2.0) for more details.
 
 ## Donations
 If you like what you're seeing and want me to contribute more of my time to this project, you can donate to show your support! It's okay if you don't though, Minecraft Offline is free and open-source after all. You can find the PayPal donation button at the top of this document if you're interested.
