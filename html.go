@@ -16,6 +16,9 @@ func buildHTML() string {
 	}
 	html.SelectEnd()
 	html.NewLine()
+	html.Label("server", "Enter direct connect (empty to ignore): ")
+	html.Input("server", "server")
+	html.NewLine()
 	html.FormSubmit("Run Minecraft")
 
 	return html.String()
@@ -59,8 +62,8 @@ func (html *HTML) Label(id, msg string) {
 	html.raw += "<label for=\"" + id + "\">" + msg + "</label>"
 }
 
-func (html *HTML) Input(id string) {
-	html.raw += "<input type=\"text\" id=\"id\" name=\"name\">"
+func (html *HTML) Input(id, name string) {
+	html.raw += "<input type=\"text\" id=\"" + id + "\" name=\"" + name + "\">"
 }
 
 func (html *HTML) Button(call, msg string) {

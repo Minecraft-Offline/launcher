@@ -28,13 +28,16 @@ func StartWebsrv() error {
 	})
 
 	router.Get("/launch", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Location", "/")
 		targetVersion = r.URL.Query().Get("version")
+		server = r.URL.Query().Get("server")
 		log.Trace("/launch: version: ", targetVersion)
-		doDownloadVersion()
-		doDownloadAssets()
-		doDownloadLibraries()
-		doGameStart()
+		render.PlainText(w, r, "Starting Minecraft "+targetVersion+"...")
+		go func() {
+			doDownloadVersion()
+			doDownloadAssets()
+			doDownloadLibraries()
+			doGameStart()
+		}()
 	})
 
 	walkFunc := func(method, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {

@@ -20,6 +20,7 @@ var (
 	customArgs      string //The additional things to add to gameArgs
 	email           string //Mojang account username
 	password        string //Mojang account password
+	server          string //The server to connect to on launch, empty to ignore
 	token           string //The path to the auth token file
 	targetVersion   string //The version to run if not the latest
 	versionManifest string //A URL to the JSON manifest to use for fetching game versions
@@ -70,6 +71,7 @@ func init() {
 	flag.StringVar(&customArgs, "customArgs", "", "the additional arguments to pass to the game")
 	flag.StringVar(&email, "email", "", "your mojang account email")
 	flag.StringVar(&password, "password", "", "your mojang account password")
+	flag.StringVar(&server, "server", "", "ip:port")
 	flag.StringVar(&targetVersion, "version", "", "the target game version")
 	flag.StringVar(&versionManifest, "versionManifest", "https://launchermeta.mojang.com/mc/game/version_manifest.json", "the version manifest to fetch game versions")
 	flag.IntVar(&verbosity, "verbosity", 0, "sets the verbosity level; 0 = default, 1 = debug, 2 = trace")
@@ -398,6 +400,24 @@ func doGameStart() {
 	launchArgs := jvmArgs + "\x00-cp\x00" + libraries + "\x00" + selectedVersion.MainClass + "\x00" + gameArgs
 	if customArgs != "" {
 		launchArgs += "\x00" + strings.Replace(customArgs, " ", "\x00", -1)
+	}
+
+	if server != "" {
+		host := strings.Split(server, ":")
+		switch len(host) {
+		case 0:
+			break
+		case 1:
+			launchArgs += "\x00--server\x00" + host[0] + "\x00--port\x0025565"
+		case 2:
+			if _, err := strconv.Atoi(host[1]); err != nil {
+				log.Fatal(err)
+			}
+
+			launchArgs += "\x00--server\x00" + host[0] + "\x00--port\x00" + host[1]
+		default:
+			log.Fatal("Server string invalid")
+		}
 	}
 
 	execArgs := strings.Split(launchArgs, "\x00")

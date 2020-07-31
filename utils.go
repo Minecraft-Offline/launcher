@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"syscall"
 )
 
@@ -260,18 +259,4 @@ func hash_file_sha1(filePath string) (string, error) {
 
 	return returnSHA1String, nil
 
-}
-
-func quoteArg(arg string) string {
-	if strings.Contains(arg, " ") {
-		if strings.Contains(arg, "=") {
-			arg = strings.Replace(arg, "=", "=\"", 1) + "\""
-		} else {
-			arg = "\"" + arg + "\""
-		}
-	}
-
-	log.Trace("quoteArg: ", arg)
-
-	return arg
 }

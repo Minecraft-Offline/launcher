@@ -25,7 +25,7 @@ func NewWebview(webURL string) (*Webview, error) {
 
 	w.view = webview.New(w.debug)
 	w.view.SetTitle("Minecraft Offline v0.0.0 (" + runtime.GOOS + "/" + runtime.GOARCH + ")")
-	w.view.SetSize(800, 600, webview.HintNone)
+	w.view.SetSize(450, 90, webview.HintNone)
 	w.view.Navigate(webURL)
 
 	return w, nil
