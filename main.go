@@ -386,7 +386,7 @@ func doGameStart() {
 	gameArgs = strings.Replace(gameArgs, "${assets_root}", gameDir+"/assets", -1)
 	gameArgs = strings.Replace(gameArgs, "${assets_index_name}", selectedVersion.Assets, -1)
 	gameArgs = strings.Replace(gameArgs, "${auth_access_token}", auth.AccessToken, -1)
-	gameArgs = strings.Replace(gameArgs, "${auth_session}", auth.DecodeToken.YGGT, -1) //TODO: find where session ID is stored for legacy online play
+	gameArgs = strings.Replace(gameArgs, "${auth_session}", auth.DecodeToken.YGGT, -1)
 	gameArgs = strings.Replace(gameArgs, "${auth_player_name}", auth.Username, -1)
 	gameArgs = strings.Replace(gameArgs, "${auth_uuid}", auth.ID, -1)
 	gameArgs = strings.Replace(gameArgs, "${game_assets}", gameDir+"/assets/virtual/legacy", -1)
