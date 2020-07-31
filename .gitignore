@@ -1,0 +1,6 @@
+# dotminecraft
+.minecraft/
+
+# launcher executables
+launcher
+launcher.exe
