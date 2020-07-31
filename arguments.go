@@ -9,7 +9,7 @@ import (
 )
 
 /* Developer notes:
-//  We use \x00 as the separator for arguments instead of a space character to accomodate for game arguments with spaces in them
+//  We use \x00 as the separator for arguments instead of a space character to accommodate for game arguments with spaces in them
 */
 
 type Arguments struct {
