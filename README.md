@@ -2,7 +2,7 @@
 
 ### A Minecraft launcher written in Go
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/Minecraft-Offline/launcher)](https://goreportcard.com/badge/github.com/Minecraft-Offline/launcher)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Minecraft-Offline/launcher)](https://goreportcard.com/report/github.com/Minecraft-Offline/launcher)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JoshuaDoes)
 
 ---
