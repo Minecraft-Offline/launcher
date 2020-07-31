@@ -24,7 +24,7 @@ type Arguments struct {
 }
 
 func (args *Arguments) GameArgs() (arguments string) {
-	arguments += strings.Join(args.GameRaw, " ")
+	arguments += strings.Join(args.GameRaw, "\x00")
 	for i := 0; i < len(args.GameRules); i++ {
 		valid := false
 		for _, rule := range args.GameRules[i].Rules {
@@ -44,7 +44,7 @@ func (args *Arguments) GameArgs() (arguments string) {
 
 		if len(args.GameRules[i].RawValues) > 0 {
 			for _, arg := range args.GameRules[i].RawValues {
-				arguments += "\x00" + quoteArg(arg)
+				arguments += "\x00" + arg
 			}
 		}
 	}
@@ -53,7 +53,7 @@ func (args *Arguments) GameArgs() (arguments string) {
 }
 
 func (args *Arguments) JVMArgs() (arguments string) {
-	arguments += strings.Join(args.JVMRaw, " ")
+	arguments += strings.Join(args.JVMRaw, "\x00")
 	for i := 0; i < len(args.JVMRules); i++ {
 		valid := false
 		for _, rule := range args.JVMRules[i].Rules {
@@ -79,7 +79,7 @@ func (args *Arguments) JVMArgs() (arguments string) {
 					//Caused by: java.lang.ClassNotFoundException: 10"
 					continue
 				}
-				arguments += "\x00" + quoteArg(arg) //As an even bigger fuck you, I'm quoteArg'ing harder
+				arguments += "\x00" + arg //As an even bigger fuck you, I'm quoteArg'ing harder
 			}
 		}
 	}

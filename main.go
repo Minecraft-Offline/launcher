@@ -15,10 +15,11 @@ import (
 
 //Various command-line flags
 var (
+	gameDir         string //The folder to use instead of .minecraft
 	cacheDir        string //The root cache folder, useful to change if you have faster I/O on another drive
+	customArgs      string //The additional things to add to gameArgs
 	email           string //Mojang account username
 	password        string //Mojang account password
-	gameDir         string //The folder to use instead of .minecraft
 	token           string //The path to the auth token file
 	targetVersion   string //The version to run if not the latest
 	versionManifest string //A URL to the JSON manifest to use for fetching game versions
@@ -64,10 +65,11 @@ func init() {
 	oldGameDir := gameDir
 
 	//Apply the command-line flags
+	flag.StringVar(&gameDir, "gameDir", gameDir, "the directory to hold launcher and game data")
 	flag.StringVar(&cacheDir, "cacheDir", gameDir+"/cache", "the directory to hold cache objects")
+	flag.StringVar(&customArgs, "customArgs", "", "the additional arguments to pass to the game")
 	flag.StringVar(&email, "email", "", "your mojang account email")
 	flag.StringVar(&password, "password", "", "your mojang account password")
-	flag.StringVar(&gameDir, "gameDir", gameDir, "the directory to hold launcher and game data")
 	flag.StringVar(&targetVersion, "version", "", "the target game version")
 	flag.StringVar(&versionManifest, "versionManifest", "https://launchermeta.mojang.com/mc/game/version_manifest.json", "the version manifest to fetch game versions")
 	flag.IntVar(&verbosity, "verbosity", 0, "sets the verbosity level; 0 = default, 1 = debug, 2 = trace")
@@ -351,12 +353,9 @@ func doGameStart() {
 		if library.Path == "" {
 			continue
 		}
-		if libraries != "" {
-			libraries += separator
-		}
-		libraries += library.Path
+		libraries += library.Path + separator
 	}
-	libraries += separator + selectedVersion.Path
+	libraries += selectedVersion.Path
 
 	nativesDir := ""
 	switch runtime.GOOS {
@@ -369,7 +368,7 @@ func doGameStart() {
 	}
 
 	gameArgs := ""
-	jvmArgs := fmt.Sprintf("-Djava.library.path=%s\x00-Dminecraft.launcher.brand=gomc\x00-Dminecraft.launcher.version=0.0.0\x00-cp\x00%s", nativesDir, gameDir+"/libraries")
+	jvmArgs := fmt.Sprintf("-Djava.library.path=%s\x00-Dminecraft.launcher.brand=gomc\x00-Dminecraft.launcher.version=0.0.0", nativesDir)
 
 	if selectedVersion.LegacyArguments != "" {
 		gameArgs = selectedVersion.LegacyArguments
@@ -393,17 +392,25 @@ func doGameStart() {
 	gameArgs = strings.Replace(gameArgs, "${game_directory}", gameDir, -1)
 	gameArgs = strings.Replace(gameArgs, "${user_properties}", "[]", -1)
 	gameArgs = strings.Replace(gameArgs, "${user_type}", "mojang", -1)
-	gameArgs = strings.Replace(gameArgs, "${version_name}", "\""+selectedVersion.ID+"\"", -1)
+	gameArgs = strings.Replace(gameArgs, "${version_name}", selectedVersion.ID, -1)
 	gameArgs = strings.Replace(gameArgs, "${version_type}", selectedVersion.Type, -1)
 
 	launchArgs := jvmArgs + "\x00-cp\x00" + libraries + "\x00" + selectedVersion.MainClass + "\x00" + gameArgs
+	if customArgs != "" {
+		launchArgs += "\x00" + strings.Replace(customArgs, " ", "\x00", -1)
+	}
+
+	execArgs := strings.Split(launchArgs, "\x00")
+	if verbosity > 0 {
+		for _, execArg := range execArgs {
+			log.Trace("Argument: ", execArg)
+		}
+	}
 
 	gameProcess := exec.Command("java", strings.Split(launchArgs, "\x00")...)
 	gameProcess.Dir = gameDir
 	gameProcess.Stdout = os.Stdout
 	gameProcess.Stderr = os.Stderr
-
-	log.Trace("gameProcess: ", gameProcess)
 
 	log.Info("Starting Minecraft ", selectedVersion.ID, "...")
 	err = gameProcess.Run()
