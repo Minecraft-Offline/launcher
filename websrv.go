@@ -7,6 +7,7 @@ import (
 
 	//std necessities
 	"net/http"
+	"net/url"
 )
 
 func StartWebsrv() error {
@@ -18,20 +19,32 @@ func StartWebsrv() error {
 	)
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		render.HTML(w, r, buildHTML())
+		render.HTML(w, r, htmlLogin(nil))
 	})
 
-	router.Get("/login/{email}/{password}", func(w http.ResponseWriter, r *http.Request) {
-		email = chi.URLParam(r, "email")
-		password = chi.URLParam(r, "password")
-		doLogin()
+	router.Get("/login", func(w http.ResponseWriter, r *http.Request) {
+		email, _ = url.QueryUnescape(r.URL.Query().Get("mcemail"))
+		password, _ = url.QueryUnescape(r.URL.Query().Get("mcpwd"))
+
+		doLoadToken()
+		if err := doLogin(); err != nil {
+			log.Error(err)
+			render.HTML(w, r, htmlLogin(err))
+			return
+		}
+
+		doFetchVersions()
+
+		render.HTML(w, r, htmlLauncher())
 	})
 
 	router.Get("/launch", func(w http.ResponseWriter, r *http.Request) {
 		targetVersion = r.URL.Query().Get("version")
 		server = r.URL.Query().Get("server")
+
 		log.Trace("/launch: version: ", targetVersion)
 		render.PlainText(w, r, "Starting Minecraft "+targetVersion+"...")
+
 		go func() {
 			doDownloadVersion()
 			doDownloadAssets()

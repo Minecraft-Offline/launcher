@@ -21,7 +21,6 @@ var (
 	email           string //Mojang account username
 	password        string //Mojang account password
 	server          string //The server to connect to on launch, empty to ignore
-	token           string //The path to the auth token file
 	targetVersion   string //The version to run if not the latest
 	versionManifest string //A URL to the JSON manifest to use for fetching game versions
 	verbosity       int    //0 = default (info, warning, error), 1 = 0 + debug, 2 = 1 + trace
@@ -105,8 +104,8 @@ func main() {
 
 	doCleanup()
 	doInitCache()
-	doLogin()
-	doFetchVersions()
+	//doLogin()
+	//doFetchVersions()
 	doWebview()
 	/*
 		doDownloadVersion()
@@ -160,23 +159,27 @@ func doWebview() {
 	webView.Destroy()
 }
 
-func doLogin() {
-	if fileExists(token) {
+func doLoadToken() {
+	if fileExists(gameDir + "/token") {
 		log.Debug("Loading token...")
 		auth.LoadToken(gameDir + "/token")
 	}
+}
 
+func doLogin() error {
 	log.Info("Logging in...")
 	err = auth.Login()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	log.Debug("Saving authentication token...")
 	err = auth.SaveToken(gameDir + "/token")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
 
 func doFetchVersions() {

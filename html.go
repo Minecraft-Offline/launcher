@@ -1,11 +1,45 @@
 package main
 
 import (
-//std necessities
+	//std necessities
+	"fmt"
 )
 
-func buildHTML() string {
-	html := &HTML{}
+var mainCSS = `
+body {
+	color: #FAFAFA;
+	background-color: #1C1C1C;
+}
+`
+
+func htmlLogin(loginErr error) string {
+	html := &HTML{
+		css: mainCSS,
+	}
+
+	html.FormStart("/login")
+	html.Label("email", "Mojang Email: ")
+	html.Input("text", "mcemail", "mcemail")
+	html.NewLine()
+	html.Label("password", "Mojang Password: ")
+	html.Input("password", "mcpwd", "mcpwd")
+	html.NewLine()
+	html.FormSubmit("Login")
+	html.FormEnd()
+
+	if loginErr != nil {
+		html.Label("errorMsg", "An error occurred logging into your Mojang account.")
+		html.NewLine()
+		html.Label("errorDetail", fmt.Sprintf("%v", loginErr))
+	}
+
+	return html.String()
+}
+
+func htmlLauncher() string {
+	html := &HTML{
+		css: mainCSS,
+	}
 
 	html.FormStart("/launch")
 	html.Label("version", "Choose a version: ")
@@ -17,9 +51,10 @@ func buildHTML() string {
 	html.SelectEnd()
 	html.NewLine()
 	html.Label("server", "Enter direct connect (empty to ignore): ")
-	html.Input("server", "server")
+	html.Input("text", "server", "server")
 	html.NewLine()
 	html.FormSubmit("Run Minecraft")
+	html.FormEnd()
 
 	return html.String()
 }
@@ -62,8 +97,8 @@ func (html *HTML) Label(id, msg string) {
 	html.raw += "<label for=\"" + id + "\">" + msg + "</label>"
 }
 
-func (html *HTML) Input(id, name string) {
-	html.raw += "<input type=\"text\" id=\"" + id + "\" name=\"" + name + "\">"
+func (html *HTML) Input(inputType, id, name string) {
+	html.raw += "<input type=\"" + inputType + "\" id=\"" + id + "\" name=\"" + name + "\">"
 }
 
 func (html *HTML) Button(call, msg string) {
