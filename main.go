@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -61,7 +62,7 @@ func init() {
 		home := os.Getenv("HOME")
 		gameDir = home + "/Library/Application Support/minecraft"
 	default:
-		log.Fatal("Unsupported platform: ", runtime.GOOS)
+		panic("Unsupported platform: " + runtime.GOOS)
 	}
 
 	oldGameDir := gameDir
@@ -81,8 +82,18 @@ func init() {
 
 	flag.Parse()
 
-	//Update changed paths when gameDir changes
+	//Create the logger
+	log = logger.NewLogger(logPrefix, verbosity)
+
+	//Check if gameDir was updated
 	if oldGameDir != gameDir {
+		//Convert relative path to absolute path
+		gameDir, err = filepath.Abs(gameDir)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		//Update changed paths
 		cacheDir = gameDir + "/cache"
 	}
 
@@ -94,9 +105,6 @@ func init() {
 		Email:    email,
 		Password: password,
 	}
-
-	//Create the logger
-	log = logger.NewLogger(logPrefix, verbosity)
 }
 
 func main() {
