@@ -443,7 +443,11 @@ func doGameStart() {
 	execArgs := strings.Split(launchArgs, "\x00")
 	if verbosity > 0 {
 		for _, execArg := range execArgs {
-			log.Trace("Argument: ", execArg)
+			if strings.Contains(execArg, auth.AccessToken) || strings.Contains(execArg, auth.DecodeToken.YGGT) {
+				log.Trace("Argument: [REDACTED]")
+			} else {
+				log.Trace("Argument: ", execArg)
+			}
 		}
 	}
 
