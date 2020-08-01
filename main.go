@@ -368,13 +368,17 @@ func doGameStart() {
 	libraries += selectedVersion.Path
 
 	nativesDir := ""
+	librariesDir := ""
 	switch runtime.GOOS {
 	case "windows":
 		nativesDir = gameDir + "\\natives\\windows"
+		librariesDir = gameDir + "\\libraries"
 	case "linux":
 		nativesDir = gameDir + "/natives/linux"
+		librariesDir = gameDir + "/libraries"
 	case "darwin":
 		nativesDir = gameDir + "/natives/osx"
+		librariesDir = gameDir + "/libraries"
 	}
 
 	gameArgs := ""
