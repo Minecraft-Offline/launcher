@@ -45,8 +45,11 @@ func htmlLauncher(launchVer string) string {
 	html.Label("version", "Choose a version: ")
 	html.SelectStart("version", "version")
 	for i := 0; i < len(versions.Versions); i++ {
-		version := versions.Versions[i]
-		html.Option(version.ID, version.ID)
+		selected := false
+		if versions.Versions[i].ID == launchVer {
+			selected = true
+		}
+		html.Option(versions.Versions[i].ID, versions.Versions[i].ID, selected)
 	}
 	html.SelectEnd()
 	html.NewLine()
@@ -117,6 +120,10 @@ func (html *HTML) SelectEnd() {
 	html.raw += "</select>"
 }
 
-func (html *HTML) Option(value, msg string) {
-	html.raw += "<option value=\"" + value + "\">" + msg + "</option>"
+func (html *HTML) Option(value, msg string, selected bool) {
+	html.raw += "<option value=\"" + value + "\""
+	if selected {
+		html.raw += " selected"
+	}
+	html.raw += ">" + msg + "</option>"
 }
