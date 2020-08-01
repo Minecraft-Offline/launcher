@@ -30,6 +30,8 @@ func htmlLogin(loginErr error) string {
 	if loginErr != nil {
 		html.Label("errorMsg", "An error occurred logging into your Mojang account.")
 		html.NewLine()
+		html.Label("errorHelp", "Make sure you can login through the Minecraft website in your web browser.")
+		html.NewLine()
 		html.Label("errorDetail", fmt.Sprintf("%v", loginErr))
 	}
 
