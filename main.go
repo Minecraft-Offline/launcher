@@ -438,6 +438,6 @@ func doGameStart() {
 	log.Info("Starting Minecraft ", selectedVersion.ID, "...")
 	err = gameProcess.Run()
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 }
