@@ -395,7 +395,7 @@ func doGameStart() {
 	gameArgs = strings.Replace(gameArgs, "${auth_uuid}", auth.ID, -1)
 	gameArgs = strings.Replace(gameArgs, "${game_assets}", gameDir+"/assets/virtual/legacy", -1)
 	gameArgs = strings.Replace(gameArgs, "${game_directory}", gameDir, -1)
-	gameArgs = strings.Replace(gameArgs, "${user_properties}", "[]", -1)
+	gameArgs = strings.Replace(gameArgs, "${user_properties}", "{}", -1)
 	gameArgs = strings.Replace(gameArgs, "${user_type}", "mojang", -1)
 	gameArgs = strings.Replace(gameArgs, "${version_name}", selectedVersion.ID, -1)
 	gameArgs = strings.Replace(gameArgs, "${version_type}", selectedVersion.Type, -1)
