@@ -382,7 +382,7 @@ func doGameStart() {
 	}
 
 	gameArgs := ""
-	jvmArgs := fmt.Sprintf("-Djava.library.path=%s\x00-Dminecraft.launcher.brand=gomc\x00-Dminecraft.launcher.version=0.0.0", nativesDir)
+	jvmArgs := fmt.Sprintf("-Djava.library.path=%s\x00-Dminecraft.launcher.brand=gomc\x00-Dminecraft.launcher.version=0.0.0\x00-cp\x00%s", nativesDir, librariesDir)
 
 	if selectedVersion.LegacyArguments != "" {
 		gameArgs = strings.Replace(selectedVersion.LegacyArguments, " ", "\x00", -1)
