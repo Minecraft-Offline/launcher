@@ -21,12 +21,22 @@ As of writing, the current state of the launcher is working but has an incomplet
 
 ##### Windows: You *must* install TDM-GCC-64 or a working alternative in order to compile Go's side of webview, the driver behind the launcher interface. Further, if you would like to compile 32-bit webview DLLs or compile updated 64-bit webview DLLs, you need to install Visual Studio and run `$GOPATH\src\github.com\webview\webview\script\build.bat` to compile them. You'll find the resulting DLLs under `$GOPATH\src\github.com\webview\webview\dll\` inside of your architecture's subdirectory, which need to be placed in the same directory as Minecraft Offline.
 
+Install dependencies:
+```
+go get github.com/JoshuaDoes/govvv
+```
+
 Download and build Minecraft Offline:
 ```
 git clone https://github.com/Minecraft-Offline/launcher.git Minecraft-Offline
 cd Minecraft-Offline
 go get
-go build
+govvv build
+```
+
+Creating release builds:
+```
+govvv build -ldflags="-s -w"
 ```
 
 ## Running the build

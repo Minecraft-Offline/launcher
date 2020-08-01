@@ -4,6 +4,7 @@ import (
 	"github.com/webview/webview"
 
 	//std necessities
+	"fmt"
 	"net/url"
 	"runtime"
 )
@@ -24,7 +25,7 @@ func NewWebview(webURL string) (*Webview, error) {
 	}
 
 	w.view = webview.New(w.debug)
-	w.view.SetTitle("Minecraft Offline v0.0.0 (" + runtime.GOOS + "/" + runtime.GOARCH + ")")
+	w.view.SetTitle(fmt.Sprintf("Minecraft Offline (%s-%s-%s-%s-%s)", GitBranch, GitState, GitCommit, runtime.GOOS, runtime.GOARCH))
 	w.view.SetSize(650, 320, webview.HintNone)
 	w.view.Navigate(webURL)
 
