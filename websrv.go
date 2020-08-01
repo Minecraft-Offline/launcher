@@ -13,9 +13,9 @@ import (
 func StartWebsrv() error {
 	router := chi.NewRouter()
 	router.Use(
-		middleware.Logger,
 		middleware.RedirectSlashes,
 		middleware.Recoverer,
+		//middleware.Logger,
 	)
 
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
