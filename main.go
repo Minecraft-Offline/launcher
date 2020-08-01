@@ -457,4 +457,6 @@ func doGameStart() {
 	if err != nil {
 		log.Error(err)
 	}
+
+	log.Info("Minecraft ", selectedVersion.ID, " closed gracefully")
 }
