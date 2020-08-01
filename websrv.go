@@ -45,6 +45,8 @@ func StartWebsrv() error {
 		render.HTML(w, r, htmlLauncher(targetVersion))
 
 		go func() {
+			doCleanup()
+			doFetchVersions()
 			doDownloadVersion()
 			doDownloadAssets()
 			doDownloadLibraries()
