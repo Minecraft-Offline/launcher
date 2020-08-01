@@ -36,7 +36,7 @@ func htmlLogin(loginErr error) string {
 	return html.String()
 }
 
-func htmlLauncher() string {
+func htmlLauncher(launchVer string) string {
 	html := &HTML{
 		css: mainCSS,
 	}
@@ -55,6 +55,10 @@ func htmlLauncher() string {
 	html.NewLine()
 	html.FormSubmit("Run Minecraft")
 	html.FormEnd()
+
+	if launchVer != "" {
+		html.Label("launchMsg", "Launching Minecraft "+launchVer+"...")
+	}
 
 	return html.String()
 }

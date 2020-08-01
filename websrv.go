@@ -35,15 +35,14 @@ func StartWebsrv() error {
 
 		doFetchVersions()
 
-		render.HTML(w, r, htmlLauncher())
+		render.HTML(w, r, htmlLauncher(""))
 	})
 
 	router.Get("/launch", func(w http.ResponseWriter, r *http.Request) {
 		targetVersion = r.URL.Query().Get("version")
 		server = r.URL.Query().Get("server")
 
-		log.Trace("/launch: version: ", targetVersion)
-		render.PlainText(w, r, "Starting Minecraft "+targetVersion+"...")
+		render.HTML(w, r, htmlLauncher(targetVersion))
 
 		go func() {
 			doDownloadVersion()
