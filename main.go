@@ -24,6 +24,8 @@ var (
 	targetVersion   string //The version to run if not the latest
 	versionManifest string //A URL to the JSON manifest to use for fetching game versions
 	verbosity       int    //0 = default (info, warning, error), 1 = 0 + debug, 2 = 1 + trace
+
+	ihavebadinternet bool //Enable SHA1 hash checking of all files, in case of frequent internet issues preventing completed downloads
 )
 
 //Logging stuff
@@ -74,6 +76,9 @@ func init() {
 	flag.StringVar(&targetVersion, "version", "", "the target game version")
 	flag.StringVar(&versionManifest, "versionManifest", "https://launchermeta.mojang.com/mc/game/version_manifest.json", "the version manifest to fetch game versions")
 	flag.IntVar(&verbosity, "verbosity", 0, "sets the verbosity level; 0 = default, 1 = debug, 2 = trace")
+
+	flag.BoolVar(&ihavebadinternet, "ihavebadinternet", false, "enables SHA1 hashing of all files")
+
 	flag.Parse()
 
 	//Update changed paths when gameDir changes

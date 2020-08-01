@@ -191,11 +191,15 @@ func fileCopy(src, dst string) error {
 func download(url, filepath, sha1 string) error {
 	//log.Trace("download(", url, ", ", filepath, ", ", sha1, ")")
 	if fileExists(filepath) {
-		hash, err := hash_file_sha1(filepath)
-		if err == nil {
-			if hash == sha1 {
-				return nil
+		if ihavebadinternet {
+			hash, err := hash_file_sha1(filepath)
+			if err == nil {
+				if hash == sha1 {
+					return nil
+				}
 			}
+		} else {
+			return nil
 		}
 	}
 
@@ -216,14 +220,16 @@ func download(url, filepath, sha1 string) error {
 		return err
 	}
 
-	if sha1 != "" {
-		hash, err := hash_file_sha1(filepath)
-		if err != nil {
-			return err
-		}
+	if ihavebadinternet {
+		if sha1 != "" {
+			hash, err := hash_file_sha1(filepath)
+			if err != nil {
+				return err
+			}
 
-		if hash != sha1 {
-			return fmt.Errorf("download: hash for (\"%s\") doesn't match hash for (\"%s\")", url, hash)
+			if hash != sha1 {
+				return fmt.Errorf("download: hash for (\"%s\") doesn't match hash for (\"%s\")", url, hash)
+			}
 		}
 	}
 
